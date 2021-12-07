@@ -248,14 +248,9 @@ router.get('/my-bookings', async function (req, res, next) {
 
 ![Service emailSender](https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/email-service.png?raw=true)
 
-![Service emailSender](https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/email-service.png)
-
-![https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/email-service.png?raw=true]
-
-
 ### Service bookingHandler:
 
-![https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/booking-service.png?raw=true]
+![Service bookingHandler](https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/booking-service.png)
 
 ## Puppeteer(Booking Service)
 Here is where the magic begins!, only one reference for rule the whole process:
