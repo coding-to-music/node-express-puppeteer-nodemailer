@@ -246,6 +246,10 @@ router.get('/my-bookings', async function (req, res, next) {
 
 ### Service emailSender:
 
+![Service emailSender](https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/email-service.png?raw=true)
+
+![Service emailSender](https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/email-service.png)
+
 ![https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/email-service.png?raw=true]
 
 
