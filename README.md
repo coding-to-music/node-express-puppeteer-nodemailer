@@ -243,30 +243,36 @@ router.get('/my-bookings', async function (req, res, next) {
 });
 ```
 ## Services Visualization
+
 ### Service emailSender:
 
+![https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/email-service.png?raw=true]
 
 
 ### Service bookingHandler:
 
-
+![https://github.com/coding-to-music/node-express-puppeteer-nodemailer/blob/main/images/booking-service.png?raw=true]
 
 ## Puppeteer(Booking Service)
 Here is where the magic begins!, only one reference for rule the whole process:
+
+```java
 const puppeteer = require('puppeteer');
+```
+
 After this import, puppeteer is ready to roll!; there are plenty of examples on the internet, most of them apply all the concepts for web scraping in one single file, this is not the case.
 
 This project applies some separations that, from my perspective, makes it easier to understand what's going on every step throughout the whole process, so let's dive into the sections:
 
--- Start the Browser --
+### -- Start the Browser --
 
 The first interaction is starting the Browser. Puppeteer works perfectly with Chronium and Nightly, for this project the reference used is the default one, with Chrome(the web site to scrap only opens on Chrome), but if Firefox preferred, take a look at this thread on StackOverflow.
 
 In the piece of code below, there is a var initialized for isProduction, this var is ready for being used when deployed on a web platform(Heroku we'll talk about it later), and another for isDev, I repeat, this is for explanation purposes, it is not required to have 2 when one of them can be denied and cause the same result.
 
-When isProduction the launch is done headless by default, it means that the process is done in the background without any UI, also some args are included for a better performance, refer to the list of Chromium flags here.
+When `isProduction` the launch is done headless by default, it means that the process is done in the background without any UI, also some args are included for a better performance, refer to the list of Chromium flags here.
 
-When isDev, the headless is false, and args also include one for opening te dev tools after loading the browser.
+When `isDev`, the headless is false, and args also include one for opening te dev tools after loading the browser.
 
 ```java
 const isProduction = process.env.NODE_ENV === 'production' ? true : false;
@@ -303,7 +309,7 @@ async function startBrowser() {
 ```
 As seen above, the site is loaaded in Incognito, but can be opened in a regular tab.
 
--- Do Login --
+### -- Do Login --
 
 For doing the login, some puppeteer features come in play:
 
@@ -311,7 +317,9 @@ For doing the login, some puppeteer features come in play:
 - `type`: types a value in an input field
 - `click`: allows clicking on buttons, table cells, submits
 - `waitForSelector`: recommended for allowing the page to recognize a particular selector before moving along
-`screenshot: takes a screenshot on demand, and store it in the app(it is possible to redirect the screenshots to remote services, in dev just place them in a root folder)
+`screenshot`: takes a screenshot on demand, and store it in the app(it is possible to redirect the screenshots to remote services, in dev just place them in a root folder)
+
+```java
 async function doLogIn(page, webSiteUser, webSitePassword) {
   await page.goto(constants.baseUrl + constants.loginEndpoint, {
     timeout: constants.timeOut,
@@ -329,6 +337,8 @@ async function doLogIn(page, webSiteUser, webSitePassword) {
 
   return await findLink(page, constants.scheduleEndpoint);
 }
+```
+
 Something to remark in the code above is that when dealing on development environment, the screenshots are taken, in production those are skipped(on purpose for the sake of the example)
 
 ## -- Find a link --
@@ -342,23 +352,27 @@ async function findLink(page, endpoint) {
   );
   return pageLinks.includes(endpoint) || null;
 }
--- Close the Browser --
+```
+
+### -- Close the Browser --
 
 Just pass the browser instance as parameter and close it.
+```java
 async function closeBrowser(browser) {
   return browser.close();
 }
 ```
 Note: not going to elaborate on the details of the booking process, just take into account:
 
-It is a wizard
-The wizard has 3 steps, the final one is a submit
-The name of the elements in the query selectors are tied to the site I'm scraping on, feel free to change them as much as you need
-The idea is to share how to find elements, how to use query selectors, how to get the outerHtml on elements, wait for them to be available, all of this using Puppeteer
-Nodemailer(Email Service)
+- It is a wizard
+- The wizard has 3 steps, the final one is a submit
+- The name of the elements in the query selectors are tied to the site I'm scraping on, feel free to change them as much as you need
+- The idea is to share how to find elements, how to use query selectors, how to get the outerHtml on elements, wait for them to be available, all of this using Puppeteer
+
+## Nodemailer(Email Service)
 Email service is contained in 30 lines of code, it is a define structure required by the import of nodemailer
 
-Note: When using Gmail, it is mandatory to enable less secure apps, this will create a new password for just the particular application you are trying to link to, can read more here in nodemailer or in Google Support
+`Note`: When using Gmail, it is mandatory to enable less secure apps, this will create a new password for just the particular application you are trying to link to, can read more here in nodemailer or in Google Support
 
 ```java
 const nodemailer = require('nodemailer');
@@ -395,7 +409,7 @@ module.exports = {
 
 There is not too much complication in here, pass the authUser, appPassword, email from/to and the html to be send as email.
 
-Local use and remote Deploy
+## Local use and remote Deploy
 How to be sure that everything is working as expected?, well two options:
 
 ## -- Locally --
@@ -406,8 +420,9 @@ For running this locally Postman is the tool(don't judge me too much, I am used 
   GMAIL_AUTH_USER=YOUR_USER@gmail.com GMAIL_APP_PASSWORD=YOUR_APP_PASSWORD
   GMAIL_EMAIL_FROM=YOUR_USER@gmail.com GMAIL_EMAIL_TO=YOUR_USER@gmail.com
   BOOKING_PREFER_TIME=06:55:00 npm run dev
-This command will start the local server using nodemon setting all the expected process.env variables in port 3000 by default, so just use Postman for hitting http://localhost:3000/booking/book-me or http://localhost:3000/booking/my-bookings and a result will be retrieved.
-``` 
+```
+
+This command will start the local server using nodemon setting all the expected process.env variables in port 3000 by default, so just use Postman for hitting http://localhost:3000/booking/book-me or http://localhost:3000/booking/my-bookings and a result will be retrieved. 
 
 ## -- Remote --
 
